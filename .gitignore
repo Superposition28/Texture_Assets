@@ -15,9 +15,10 @@ Tools/blender/exe
 
 old
 
-texture_mapping
+texture_mapping.json
 asset_mapping.json
 main.log
 config.ini
 
-AssetHandlerMini
+__pycache__
+
