@@ -18,7 +18,10 @@ old
 texture_mapping.json
 asset_mapping.json
 main.log
-config.ini
+
+*.ini
+
+*.pyc
 
 __pycache__
 
