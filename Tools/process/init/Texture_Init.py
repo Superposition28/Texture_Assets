@@ -140,7 +140,7 @@ def create_symbolic_links(asset_map, root_drive):
                 png_link_folder = os.path.join(target_base_dir, f"{identifier}_png")
                 try:
                     if not os.path.exists(png_link_folder):
-						
+                        
                         os.symlink(png_source_folder, png_link_folder, target_is_directory=True)
                         printc(f"Created symbolic link: {png_link_folder} -> {png_source_folder}", "magenta")
                     else:
