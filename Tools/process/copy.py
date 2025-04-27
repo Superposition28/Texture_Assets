@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 import configparser
+import argparse  # Added for argument parsing
 
 def find_conf_ini(start_path, confname) -> str:
     """Traverse the directory tree upwards to find bmsConf.ini."""
@@ -28,7 +29,7 @@ def read_config() -> tuple:
     config.read(file_path)
 
     try:
-        txd_dir = config.get('Directories', 'txd_dir')
+        txd_dir = config.get('Directories', 'txddirectory')
         png_dir = config.get('Directories', 'png_dir')
     except (configparser.NoSectionError, configparser.NoOptionError) as e:
         print(f"Error reading configuration: {e}. Exiting.", file=sys.stderr)
@@ -37,10 +38,11 @@ def read_config() -> tuple:
     return txd_dir, png_dir
 
 
-def main():
+def main(operation):
     txd_dir, png_dir = read_config()
     print(f"Source Root: {txd_dir}")
     print(f"Destination Root: {png_dir}")
+    print(f"Operation: {operation}")
 
     if not os.path.exists(txd_dir):
         print(f"Source directory '{txd_dir}' does not exist. Exiting.", file=sys.stderr)
@@ -64,7 +66,14 @@ def main():
                 if not os.path.exists(destination_dir):
                     os.makedirs(destination_dir, exist_ok=True)
 
-                shutil.copy2(full_file_path, destination_path)
+                if operation == 'copy':
+                    shutil.copy2(full_file_path, destination_path)
+                elif operation == 'move':
+                    shutil.move(full_file_path, destination_path)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Copy or move PNG files from source to destination.")
+    parser.add_argument('--operation', choices=['copy', 'move'], required=True, 
+                        help="Specify the operation: 'copy' or 'move'.")
+    args = parser.parse_args()
+    main(args.operation)

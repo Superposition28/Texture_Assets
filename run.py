@@ -13,4 +13,4 @@ def main() -> None:
     init_textures.main()
 
     print("Running copy")
-    copy.main()
+    copy.main("move")
