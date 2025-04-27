@@ -96,7 +96,8 @@ def create_module_conf(module_name: str, project_ini_path: Path, mode: str, modu
         'project_ini_path': str(project_ini_path)
     }
     conf['Directories'] = {
-        "txdDirectory": str(module_dir / "GameFiles" / "quickbms_out"),
+        #"txdDirectory": str(module_dir / "GameFiles" / "quickbms_out"),
+        "txdDirectory": str(module_dir / "../.." / "Modules/QBMS_TSG/GameFiles/quickbms_out"),
         "OutDirectory": str(module_dir / "GameFiles" / "Textures_out"),
         "LogFilePath": str(module_dir / "txd.log"),
         "txd_dir": str(module_dir / "GameFiles" / "quickbms_out"),
@@ -105,10 +106,7 @@ def create_module_conf(module_name: str, project_ini_path: Path, mode: str, modu
         "output_file": str(module_dir / "Tools" / "process" / "Texture" / "texture_mapping.json"),
     }
     conf['Scripts'] = {
-        "BmsScriptPath": str(module_dir / "Tools" / "quickbms" / "simpsons_str.bms"),
-        "QuickBMSEXEPath": str(module_dir / "Tools" / "quickbms" / "exe" / "quickbms.exe"),
-        "RenameFoldersScriptPath": str(module_dir / "Tools" / "process" / "Rename" / "RenameFolders.ps1"),
-        "FlattenDirectoryScriptPath": str(module_dir / "Tools" / "process" / "Flat" / "flat.csx"),
+        "noesis_exe_path": str(module_dir / "Tools" / "noesis" / "exe" / "Noesis64.exe"),
     }
 
     with open(conf_path, 'w') as f:

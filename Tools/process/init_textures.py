@@ -158,25 +158,53 @@ def create_symbolic_links(asset_map, root_drive):
             printc("Verbose mode sleep.", "blue")
             time.sleep(0.1)
 
-def read_config(file_path: str) -> str:
+def find_conf_ini(start_path, confname) -> str:
+    """Traverse the directory tree upwards to find bmsConf.ini."""
+    current_path = start_path
+    while True:
+        moduleConfigPath = os.path.join(current_path, confname)
+        if os.path.exists(moduleConfigPath):
+            return moduleConfigPath
+        parent_path = os.path.dirname(current_path)
+        if parent_path == current_path:  # Reached the root directory
+            break
+        current_path = parent_path
+    return None
+
+
+from typing import Tuple
+
+def read_config() -> Tuple[str, str, str, str]:
     """Reads and displays the contents of a configuration file."""
+
+    confname = r"txdConf.ini"
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = find_conf_ini(current_dir, confname)
+
     config = configparser.ConfigParser()
     config.read(file_path)
 
-    txd_dir = config.get('Directories', 'txd_dir')
+    txd_dir = config.get('Directories', 'txddirectory')
     png_dir = config.get('Directories', 'png_dir')
     output_dir = config.get('Directories', 'output_dir')
     output_file = config.get('Directories', 'output_file')
+    noesis_exe_path = config.get('Scripts', 'noesis_exe_path')
 
-    return txd_dir, png_dir, output_dir, output_file
+    return txd_dir, png_dir, output_dir, output_file, noesis_exe_path
 
 def main():
     try:
         working_dir_root = os.getcwd()
         printc(f"Working Directory: {working_dir_root}", "cyan")
 
-        txd_dir, png_dir, output_dir, output_file = read_config(file_path="txdConf.ini")
+        txd_dir, png_dir, output_dir, output_file, noesis_exe_path = read_config()
         os.makedirs(output_dir, exist_ok=True)
+
+        if not os.path.isfile(noesis_exe_path):
+            printc(f"ERROR: Noesis executable not found at: {noesis_exe_path}", "red")
+            log_to_file(f"ERROR: Noesis executable not found at: {noesis_exe_path}")
+            time.sleep(5)
+            return
 
         root_drive_letter = os.path.splitdrive(working_dir_root)[0] + os.sep
         if not root_drive_letter:
@@ -244,11 +272,10 @@ def main():
     printc("Script finished.", "white")
 
     # Noesis batch instructions
-    noesis_path = os.path.join(".", "Tools", "noesis", "exe", "Noesis64.exe")
-    if os.path.isfile(noesis_path):
-        printc(f"Opening Noesis: {noesis_path}", "cyan")
+    if os.path.isfile(noesis_exe_path):
+        printc(f"Opening Noesis: {noesis_exe_path}", "cyan")
         try:
-            subprocess.Popen([noesis_path])
+            subprocess.Popen([noesis_exe_path])
         except Exception as e:
             printc(f"Failed to launch Noesis: {e}", "red")
         printc("Noesis launched. Please complete the batch export process manually.", "green")
@@ -269,8 +296,8 @@ def main():
         log_to_file("User confirmed completion of batch process in Noesis.")
         printc("Batch processing confirmed complete.", "green")
     else:
-        printc(f"Noesis executable not found at: {noesis_path}", "red")
-        log_to_file(f"ERROR: Noesis executable not found at: {noesis_path}")
+        printc(f"Noesis executable not found at: {noesis_exe_path}", "red")
+        log_to_file(f"ERROR: Noesis executable not found at: {noesis_exe_path}")
 
 if __name__ == "__main__":
     main()
