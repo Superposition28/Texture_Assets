@@ -97,7 +97,7 @@ def create_module_conf(module_name: str, project_ini_path: Path, mode: str, modu
     }
     conf['Directories'] = {
         #"txdDirectory": str(module_dir / "GameFiles" / "quickbms_out"),
-        "txdDirectory": str(module_dir / "../.." / "Modules/QBMS_TSG/GameFiles/quickbms_out"),
+        "txdDirectory": str(module_dir / "../.." / "Modules/Extract/GameFiles/quickbms_out"),
         "OutDirectory": str(module_dir / "GameFiles" / "Textures_out"),
         "LogFilePath": str(module_dir / "txd.log"),
         "txd_dir": str(module_dir / "GameFiles" / "quickbms_out"),
