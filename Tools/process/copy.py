@@ -5,7 +5,7 @@ import configparser
 import argparse  # Added for argument parsing
 
 def find_conf_ini(start_path, confname) -> str:
-    """Traverse the directory tree upwards to find bmsConf.ini."""
+    """Traverse the directory tree upwards to find Extract.ini."""
     current_path = start_path
     while True:
         moduleConfigPath = os.path.join(current_path, confname)
